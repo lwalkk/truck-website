@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+{% block title %}
+Archive
+{% endblock %}
+{% block content %}
+<style>
+ 
+ td {
+        width: 150px;
+        text-align: center;
+        border: 1px solid black;
+        padding: 5px;
+      }
+</style>
+<p><b>Search Past Trucks Database</b></p>
+<form method="POST">
+  <div><label>Display on Screen <input type="radio" name="output" value="screen" checked="checked"></label></div>
+  <div><label>Export to CSV<input type="radio" name="output" value="csv"></div>
+  <br>
+  Date: 
+  <select name="date" id="date"> 
+    <option value = "yesterday"> Yesterday </option>
+    <option value = "lastWeek"> Last Month</option>
+    <option value = "last3Month"> Last 3 Months</option>
+    <option value = "last6Month"> Last 6 Months </option>
+    <option value = "lastYear"> Last Year</option>
+    <option value = "ALL"> All Time</option>
+  </select>
+  <br><br>
+  Location: 
+  <select name="location" id="location"> 
+    <option value = "ALL">All </option>
+    <option value = "EQY">East Quarry</option>
+    <option value = "WQY">West Quarry</option>
+    <option value = "CLK">Clinker</option>
+    <option value = "OTH">Other</option>
+  </select>
+  <br><br>
+  Company:
+  <select name="company" id="company">
+    <option value = "ALL">All</option>
+    <option value = "Lafarge">Lafarge</option>
+    <option value = "Google">Google</option>
+    <option value = "Apple">Apple</option>
+    <option value = "Facebook">Facebook</option>
+  </select> 
+  <br><br>
+  <input type="submit" value="Submit">
+</form>
+<br>
+{% if data != None %}
+<table>
+  <thead>
+    <tr>
+        <th>Plate Number</th>
+        <th>Location</th>
+        <th>Arrival Time</th>
+        <th>Departure Time</th>
+    </tr>
+    </thead>    
+    <tbody>
+     {% for row in data %}    
+            <tr>
+                <td>{{row["plate"]}}</td>
+                <td>{{row["location"]}}</td>
+                <td>{{row["time_in"]}}</td>
+                <td>{{row["time_out"]}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block title %}
+Home
+{% endblock %}
+{% block content %}
+<style>
+ 
+    td {
+           width: 150px;
+           text-align: center;
+           border: 1px solid black;
+           padding: 5px;
+         }
+   </style>
+   <p> Truckers currently on site</p>
+   <table>
+     <thead>
+       <tr>
+           <th> Truck ID   </th>
+           <th>Plate Number</th>
+           <th>Location</th>
+           <th>Arrival Time</th>
+           <th>Status</th>
+       </tr>
+       </thead>    
+       <tbody>
+        {% for row in data %}    
+               <tr>
+                   <td>{{row["truck_id"]}}</td>
+                   <td>{{row["plate"]}}</td>
+                   <td>{{row["location"]}}</td>
+                   <td>{{row["time_in"]}}</td>
+                   <td>{{row["time_out"]}}</td>
+                   <td>"green"</td>
+               </tr>
+           {% endfor %}
+       </tbody>
+   </table>
+{% endblock %}
