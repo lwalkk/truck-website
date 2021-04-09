@@ -1,7 +1,8 @@
 from flask import Flask, request
 from flask import render_template
 from flask_mysqldb import MySQL
-import CreateCsv
+import TimeCalc
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.config['MYSQL_USER'] = 'root'
@@ -17,10 +18,25 @@ mysql = MySQL(app)
 def home():
 
     cur = mysql.connection.cursor()
-    cur.execute('''SELECT * FROM onSite''')
-    data = cur.fetchall()
+    cur.execute('''SELECT * FROM on_site''')
+  
+    onSite = cur.fetchall()
 
-    return render_template('home.html', data=data)
+    cur.execute('SELECT time_in, time_out FROM archive WHERE time_in >= DATE_ADD(NOW(), INTERVAL -12 HOUR);')
+    prevTimes = cur.fetchall()
+
+    wait_times = TimeCalc.CalculateWaitTime(prevTimes, onSite)
+
+    i = 0
+    for row in onSite:
+      wait = wait_times[i] 
+      hours = (wait-datetime.now()).total_seconds() / 3600
+
+      temp_dict = {'wait_time' :wait,'time_remaining': hours}
+      row.update(temp_dict)
+      i += 1
+
+    return render_template('home.html', data=onSite, wait_times=wait_times, curr_time = datetime.now())
 
 
 
