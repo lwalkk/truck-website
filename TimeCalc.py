@@ -12,9 +12,14 @@ def CalculateWaitTime(times, onSite):
       - datetime.strptime(str(row['time_in']),'%Y-%m-%d %H:%M:%S')))
 
   avgTime = np.mean(elapsedTime)
+
+  if np.isnan(avgTime):
+    for row in onSite:
+      wait_times.append(row['time_in'] + timedelta(hours=1))
   
-  for row in onSite:
-    wait_times.append(row['time_in'] + avgTime)
+  else:
+    for row in onSite:
+      wait_times.append(row['time_in'] + avgTime)
   
   return wait_times
 
